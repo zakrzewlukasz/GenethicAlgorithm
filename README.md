@@ -11,5 +11,5 @@ Test
 https://4sysops.com/archives/install-boto3-aws-sdk-for-python-in-visual-studio-code-vs-code-on-windows/
 
 * zamaist plilków można uruchomić aws confugure i podać klucze z IAM
-
+dd
 
