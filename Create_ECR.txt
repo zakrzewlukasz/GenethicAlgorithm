@@ -18,4 +18,32 @@ repo_uri = '{}/{}'.format(base_uri, ecr_repository + tag)
 
 print("Container Build done")
 
+iam_role = 'arn:aws:iam::644215702318:role/GenethicAlgorithm-GeneticAlgorithmExecutionRole-OWPCDJ2460X5'
+
+
+
+
+########TEMPLATE############
+import boto3
+
+print("Building container...")
+
+region = boto3.session.Session().region_name
+account_id = boto3.client('sts').get_caller_identity().get('Account')
+ecr_repository = 'sagemaker-processing-container-for-ga'
+tag = ':latest'
+base_uri = '{}.dkr.ecr.{}.amazonaws.com'.format(account_id, region)
+repo_uri = '{}/{}'.format(base_uri, ecr_repository + tag)
+
+# Create ECR repository and push docker image
+#to jest napisane w języku Iphyton jeśli chcemy w Python to biblioteka os 
+# https://stackoverflow.com/questions/63333006/running-bash-command-using-exclamation-mark-not-working-with-python-prompt
+!docker build -t $ecr_repository docker
+!aws ecr get-login-password --region $region | docker login --username AWS --password-stdin $base_uri
+!aws ecr create-repository --repository-name $ecr_repository
+!docker tag {ecr_repository + tag} $repo_uri
+!docker push $repo_uri
+
+print("Container Build done")
+
 iam_role = 'ARN_FOR_THE_IAM_ROLE_CREATED_EARLIER'
